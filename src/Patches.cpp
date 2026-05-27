@@ -1,4 +1,4 @@
-#include "MemoryManagerPatch.hpp"
+#include "Patches.hpp"
 
 #include <xbyak/xbyak.h>
 
@@ -32,9 +32,9 @@ namespace {
 	}
 }
 
-namespace MemoryManagerPatch
+namespace Patches
 {
-	namespace AutoScrapBuffer
+	namespace AutoScrapBufferPatch
 	{
 		namespace
 		{
@@ -107,6 +107,8 @@ namespace MemoryManagerPatch
 			CtorLong();
 			CtorShort();
 			Dtor();
+
+			logger::info("Installed AutoScrapBuffer patch"sv);
 		}
 	}
 
@@ -170,6 +172,8 @@ namespace MemoryManagerPatch
 		{
 			WriteStubs();
 			WriteHooks();
+
+			logger::info("Installed BSTextureStreamerLocalHeap patch"sv);
 		}
 	}
 
@@ -241,10 +245,7 @@ namespace MemoryManagerPatch
 				Allocator::GameHeap _heap;
 			};
 
-#pragma warning(push)
-#pragma warning(disable: 4324)
-			class hkMemorySystem final :
-				public RE::hkMemorySystem
+			class hkMemorySystem final : public RE::hkMemorySystem
 			{
 			public:
 				using FlagBits = RE::hkMemorySystem::FlagBits;
@@ -327,10 +328,12 @@ namespace MemoryManagerPatch
 				hkMemorySystem& operator=(const hkMemorySystem&) = delete;
 				hkMemorySystem& operator=(hkMemorySystem&&) = delete;
 
+#pragma warning(push)
+#pragma warning(disable: 4324)
 				alignas(0x10) hkMemoryAllocator _allocator;
 				alignas(0x10) RE::hkMemoryRouter _router;
-			};
 #pragma warning(pop)
+			};
 		}
 
 		void Install()
@@ -338,10 +341,12 @@ namespace MemoryManagerPatch
 			auto& trampoline = F4SE::GetTrampoline();
 			REL::Relocation<std::uintptr_t> target{ REL::ID(204659), 0x68 };
 			trampoline.write_call<5>(target.address(), hkMemorySystem::GetSingleton);
+
+			logger::info("Installed HavokMemorySystem patch"sv);
 		}
 	}
 
-	namespace MemoryManager
+	namespace MemoryManagerPatch
 	{
 		namespace
 		{
@@ -412,10 +417,12 @@ namespace MemoryManagerPatch
 
 			RE::MemoryManager::GetSingleton().RegisterMemoryManager();
 			RE::BSThreadEvent::InitSDM();
+
+			logger::info("Installed MemoryManager patch"sv);
 		}
 	}
 
-	namespace ScrapHeap
+	namespace ScrapHeapPatch
 	{
 		namespace
 		{
@@ -480,14 +487,15 @@ namespace MemoryManagerPatch
 		{
 			WriteStubs();
 			WriteHooks();
+
+			logger::info("Installed ScrapHeap patch"sv);
 		}
 	}
 
 	namespace ScaleformAllocatorPatch
 	{
 		namespace {
-			class Allocator final :
-				public RE::Scaleform::SysAlloc
+			class Allocator final : public RE::Scaleform::SysAlloc
 			{
 			public:
 				[[nodiscard]] static Allocator* GetSingleton()
@@ -544,6 +552,8 @@ namespace MemoryManagerPatch
 		{
 			REL::Relocation<std::uintptr_t> target{ REL::ID(903830), 0xEC };
 			::write_thunk_call<5, Init>(target.address());
+
+			logger::info("Installed ScaleformAllocator patch"sv);
 		}
 	}
 
@@ -653,17 +663,19 @@ namespace MemoryManagerPatch
 
 			REL::Relocation<std::uintptr_t> target{ REL::ID(329149), 0x48 };
 			REL::safe_fill(target.address(), REL::NOP, 0x5);
+
+			logger::info("Installed SmallBlockAllocator patch"sv);
 		}
 	}
 
 	void Install()
 	{
-		AutoScrapBuffer::Install();
+		AutoScrapBufferPatch::Install();
 		BSTextureStreamerLocalHeapPatch::Install();
 		HavokMemorySystemPatch::Install();
-		MemoryManager::Install();
+		MemoryManagerPatch::Install();
 		ScaleformAllocatorPatch::Install();
-		ScrapHeap::Install();
+		ScrapHeapPatch::Install();
 		SmallBlockAllocatorPatch::Install();
 	}
 }

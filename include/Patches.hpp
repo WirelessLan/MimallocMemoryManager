@@ -1,6 +1,6 @@
 #pragma once
 
-namespace MemoryManagerPatch
+namespace Patches
 {
 	void Install();
 }

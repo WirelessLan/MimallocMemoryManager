@@ -1,4 +1,4 @@
-#include "MemoryManagerPatch.hpp"
+#include "Patches.hpp"
 
 extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Query(const F4SE::QueryInterface * a_f4se, F4SE::PluginInfo * a_info) {
 #ifndef NDEBUG
@@ -46,10 +46,10 @@ extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Query(const F4SE::QueryInterface * 
 }
 
 extern "C" DLLEXPORT bool F4SEAPI F4SEPlugin_Load(const F4SE::LoadInterface * a_f4se) {
-	F4SE::AllocTrampoline(static_cast<size_t>(1) << 10u);
+	F4SE::AllocTrampoline(static_cast<std::size_t>(1) << 10u);
 	F4SE::Init(a_f4se);
 
-	MemoryManagerPatch::Install();
+	Patches::Install();
 
 	return true;
 }

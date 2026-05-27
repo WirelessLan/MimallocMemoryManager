@@ -1,5 +1,5 @@
-# TestPlugin
-F4SE Plugin for Fallout 4
+# MimallocMemoryManager
+Replaces Fallout 4's memory allocator with MiMalloc.
 
 ## Requirements
 * Building
@@ -15,8 +15,17 @@ F4SE Plugin for Fallout 4
 ```
 git clone https://github.com/powerof3/CommonLibF4
 cd CommonLibF4
-git clone https://github.com/WirelessLan/TestPlugin
-cd TestPlugin
+git clone https://github.com/WirelessLan/MimallocMemoryManager
+cd MimallocMemoryManager
 cmake --preset vs2022-windows-vcpkg
 cmake --build build --config Release
 ```
+
+## References
+* [CommonLibF4](https://github.com/powerof3/CommonLibF4)
+* [Buffout4](https://github.com/alandtse/Buffout4)
+* [MiMalloc](https://github.com/microsoft/mimalloc)
+
+## License
+This project uses third-party components licensed under the MIT License.
+See [LICENSES.md](LICENSES.md) for details.
