@@ -24,7 +24,7 @@ cmake --build build --config Release
 ## References
 * [CommonLibF4](https://github.com/powerof3/CommonLibF4)
 * [Buffout4](https://github.com/alandtse/Buffout4)
-* [MiMalloc](https://github.com/microsoft/mimalloc)
+* [mimalloc](https://github.com/microsoft/mimalloc)
 
 ## License
 This project uses third-party components licensed under the MIT License.  
