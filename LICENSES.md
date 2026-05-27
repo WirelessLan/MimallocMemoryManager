@@ -58,7 +58,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## MiMalloc
+## mimalloc
 
 Repository: https://github.com/microsoft/mimalloc
 
