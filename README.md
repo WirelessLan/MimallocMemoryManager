@@ -1,5 +1,5 @@
 # MimallocMemoryManager
-Replaces Fallout 4's memory allocator with MiMalloc.
+Replaces Fallout 4's memory allocator with mimalloc.
 
 ## Requirements
 * Building
