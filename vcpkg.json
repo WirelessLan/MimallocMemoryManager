@@ -1,0 +1,17 @@
+{
+  "name": "mimallocmemorymanager",
+  "version-string": "0.1.0",
+  "license": "MIT",
+  "dependencies": [
+    "boost-stl-interfaces",
+    "fmt",
+    "mmio",
+    "spdlog",
+    {
+      "name": "mimalloc",
+      "version>=": "3.3.2"
+    },
+    "xbyak"
+  ],
+  "builtin-baseline": "56bb2411609227288b70117ead2c47585ba07713"
+}
