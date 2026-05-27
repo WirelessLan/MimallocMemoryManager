@@ -27,5 +27,5 @@ cmake --build build --config Release
 * [MiMalloc](https://github.com/microsoft/mimalloc)
 
 ## License
-This project uses third-party components licensed under the MIT License.
+This project uses third-party components licensed under the MIT License.  
 See [LICENSES.md](LICENSES.md) for details.
