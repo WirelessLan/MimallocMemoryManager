@@ -3,6 +3,7 @@
 #include <xbyak/xbyak.h>
 
 #include "Allocator.hpp"
+#include "Settings.hpp"
 
 namespace {
 	struct asm_patch : Xbyak::CodeGenerator
@@ -481,12 +482,19 @@ namespace Patches
 					REL::safe_write(target.address(), REL::RET);
 				}
 			}
+
+			void WriteHeapSize()
+			{
+				REL::Relocation<std::uintptr_t> target{ REL::ID(126418), 0x1 };
+				REL::safe_write(target.address(), &Settings::MaxScrapHeapSize, sizeof(Settings::MaxScrapHeapSize));
+			}
 		}
 
 		void Install()
 		{
 			WriteStubs();
 			WriteHooks();
+			WriteHeapSize();
 
 			logger::info("Installed ScrapHeap patch"sv);
 		}
@@ -546,12 +554,39 @@ namespace Patches
 
 				static inline REL::Relocation<decltype(thunk)> func;
 			};
+
+			void WriteHooks()
+			{
+				REL::Relocation<std::uintptr_t> target{ REL::ID(903830), 0xEC };
+				::write_thunk_call<5, Init>(target.address());
+			}
+
+			void WriteSizes()
+			{
+				// GetPageSize
+				{
+					REL::Relocation<std::uintptr_t> target{ REL::ID(1310500), 0x1 };
+					REL::safe_write(target.address(), &Settings::MaxScaleformPageSize, sizeof(Settings::MaxScaleformPageSize));
+				}
+
+				// Default PageSize
+				{
+					REL::Relocation<std::uintptr_t> target{ REL::ID(466425), 0x8B };
+					REL::safe_write(target.address(), &Settings::MaxScaleformPageSize, sizeof(Settings::MaxScaleformPageSize));
+				}
+
+				// Default HeapSize
+				{
+					REL::Relocation<std::uintptr_t> target{ REL::ID(466425), 0x91 };
+					REL::safe_write(target.address(), &Settings::MaxScaleformHeapSize, sizeof(Settings::MaxScaleformHeapSize));
+				}
+			}
 		}
 
 		void Install()
 		{
-			REL::Relocation<std::uintptr_t> target{ REL::ID(903830), 0xEC };
-			::write_thunk_call<5, Init>(target.address());
+			WriteHooks();
+			WriteSizes();
 
 			logger::info("Installed ScaleformAllocator patch"sv);
 		}

@@ -1,7 +1,9 @@
 set(SOURCES
 	include/Allocator.hpp
 	include/Patches.hpp
+	include/Settings.hpp
 	src/Patches.cpp
+	src/Settings.cpp
 	src/PCH.h
 	src/main.cpp
 )
