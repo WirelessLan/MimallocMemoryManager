@@ -31,7 +31,7 @@ add_compile_definitions(
 
 project(
 	MimallocMemoryManager
-	VERSION 0.3.0
+	VERSION 0.3.1
 	LANGUAGES CXX
 )
 
